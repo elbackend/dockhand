@@ -1,0 +1,66 @@
+deployTargetMap:
+  dev: !!com.boxboat.jenkins.library.deployTarget.KubernetesDeployTarget
+    contextName: el-dev
+    credential: kubeconfig-dev
+  stage: !!com.boxboat.jenkins.library.deployTarget.KubernetesDeployTarget
+    contextName: el-stage
+    credential: kubeconfig-stage
+  prod: !!com.boxboat.jenkins.library.deployTarget.KubernetesDeployTarget
+    contextName: el-prod
+    credential: kubeconfig-prod
+environmentMap:
+  dev:
+    name: dev
+    deployTargetKey: dev
+  stage:
+    name: stage
+    deployTargetKey: stage
+  prod:
+    name: prod
+    deployTargetKey: prod
+git:
+  buildVersionsUrl: git@github.com:elbackend/build-versions.git
+  credential: git
+  email: jesse@boxboat.com
+  remotePathRegex: github\.com[:\/]elbackend\/(.*)\.git$
+  remoteUrlReplace: git@github.com:elbackend/{{ path }}.git
+  branchUrlReplace: https://github.com/elbackend/{{ path }}/tree/{{ branch }}
+  commitUrlReplace: https://github.com/elbackend/{{ path }}/commit/{{ hash }}
+registryMap:
+  default:
+    scheme: https
+    host: nexus.boxops.elcloudtools.net
+    credential: registry
+    imageUrlReplace: https://nexus.boxops.elcloudtools.net/#browse/browse:docker-hosted:v2%2F{{ path }}%2Ftags%2F{{ tag }}
+repo:
+  common:
+    defaultBranch: master
+    eventRegistryKeys:
+      - event: commit/develop
+        registryKey: default
+      - event: commit/master
+        registryKey: default
+      - eventRegex: tag/(.*)
+        registryKey: default
+  promote:
+    promotionMap:
+      stage:
+        event: commit/develop
+        promoteToEvent: commit/master
+      prod:
+        event: commit/master
+        promoteToEvent: tag/release
+  deploy:
+    deploymentMap:
+      dev:
+        environmentKey: dev
+        event: commit/develop
+        trigger: true
+      stage:
+        environmentKey: stage
+        event: commit/master
+        trigger: true
+      prod:
+        environmentKey: prod
+        event: tag/release
+        trigger: false
