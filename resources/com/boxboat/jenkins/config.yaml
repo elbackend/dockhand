@@ -32,6 +32,11 @@ registryMap:
     host: nexus.boxops.elcloudtools.net
     credential: registry
     imageUrlReplace: https://nexus.boxops.elcloudtools.net/#browse/browse:docker-hosted:v2%2F{{ path }}%2Ftags%2F{{ tag }}
+awsProfileMap:
+  default:
+    region: us-east-1
+    accessKeyIdCredential: aws-access-key-id
+    secretAccessKeyCredential: aws-secret-access-key
 repo:
   common:
     defaultBranch: master
@@ -45,21 +50,21 @@ repo:
   promote:
     promotionMap:
       stage:
-        event: commit/develop
-        promoteToEvent: commit/master
-      prod:
         event: commit/master
+        promoteToEvent: tag/rc
+      prod:
+        event: tag/rc
         promoteToEvent: tag/release
   deploy:
     deploymentMap:
       dev:
         environmentKey: dev
-        event: commit/develop
-        trigger: true
+        event: commit/master
+        trigger: false
       stage:
         environmentKey: stage
-        event: commit/master
-        trigger: true
+        event: tag/rc
+        trigger: false
       prod:
         environmentKey: prod
         event: tag/release
