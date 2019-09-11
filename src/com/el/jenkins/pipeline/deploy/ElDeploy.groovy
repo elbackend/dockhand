@@ -5,6 +5,9 @@ import com.boxboat.jenkins.pipeline.deploy.kubernetes.HelmDeploy
 
 class ElDeploy extends BoxDeploy {
 
+    String app;
+    String chart_dir;
+
     ElDeploy(Map config = [:]) {
         super(config)
         setPropertiesFromMap(config)
@@ -12,16 +15,17 @@ class ElDeploy extends BoxDeploy {
 
     public deploy() {
       this.writeImageTags(
-        outFile: "./cicd/deploy/${app}/image-tags.yaml",
+        outFile: "${chart_dir}/${app}/image-tags.yaml",
       )
 
       def releaseName = "${app}-${this.config.deploymentKey}"
       this.allEnvironments().each { env ->
             def helmDeployApp = new HelmDeploy(
                 chart: ".",
-                directory: "./cicd/deploy/${app}",
+                directory: "${chart_dir}/${app}",
                 name: releaseName,
                 options: [
+                    "namespace": "default",
                     "set"      : [],
                     "values"   : [
                         "image-tags.yaml",
@@ -29,6 +33,9 @@ class ElDeploy extends BoxDeploy {
                     ],
                 ]
             )
+            env.withCredentials() {
+                helmDeployApp.upgrade(["install": true, "force": true, "wait": true])
+            }
         }
     }
 }
