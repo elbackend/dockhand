@@ -21,11 +21,11 @@ environmentMap:
 git:
   buildVersionsUrl: git@github.com:elbackend/build-versions.git
   credential: git
-  email: jesse@boxboat.com
+  email: jenkins@explorelearning.com
   remotePathRegex: github\.com[:\/]elbackend\/(.*)\.git$
-  remoteUrlReplace: git@github.com:elbackend/{{ path }}.git
-  branchUrlReplace: https://github.com/elbackend/{{ path }}/tree/{{ branch }}
-  commitUrlReplace: https://github.com/elbackend/{{ path }}/commit/{{ hash }}
+  remoteUrlReplace: git@github.com:{{ path }}.git
+  branchUrlReplace: https://github.com/{{ path }}/tree/{{ branch }}
+  commitUrlReplace: https://github.com/{{ path }}/commit/{{ hash }}
 registryMap:
   default:
     scheme: https
@@ -41,7 +41,7 @@ repo:
   common:
     defaultBranch: master
     eventRegistryKeys:
-      - event: commit/develop
+      - event: commit/feature-jenkins
         registryKey: default
       - event: commit/master
         registryKey: default
@@ -59,7 +59,7 @@ repo:
     deploymentMap:
       dev:
         environmentKey: dev
-        event: commit/master
+        event: commit/feature-jenkins
         trigger: false
       stage:
         environmentKey: stage
