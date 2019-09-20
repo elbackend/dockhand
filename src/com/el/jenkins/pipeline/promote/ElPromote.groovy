@@ -1,10 +1,10 @@
 package com.el.jenkins.pipeline.promote
 
-import com.boxboat.jenkins.pipeline.deploy.BoxPromote
+import com.boxboat.jenkins.pipeline.promote.BoxPromote
 
 class ElPromote extends BoxPromote {
 
-    ElDeploy(Map config = [:]) {
+    ElPromote(Map config = [:]) {
         super(config)
     }
 }
