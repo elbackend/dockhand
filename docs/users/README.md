@@ -21,7 +21,7 @@ The digram below describes the build, promote, and deploy workflow used for appl
 Docker images are built, promoted and deployed using Jenkins. An image is built when a new commit is created. This image is only tagged and stored in Nexus if the branch being built is one of the branches listed in the library config.yaml. This image is store with the tag `build-<commit_hash>` and can be deployed to the dev environment.
 
 ### Promote
-Promotion takes an image that was built and tags it with a release candidate semantic version for promotions to stage, or a unadorned semantic version for promotions to production. Promotion will queue the image up to be deployed but will not itself cause a deployment. A promotion will also tag git commit with the tag that has been added to the image.
+Promotion takes an image that was built and tags it with a release candidate semantic version for promotions to stage, or an unadorned semantic version for promotions to production. Promotion will queue the image up to be deployed but will not itself cause a deployment. A promotion will also tag git commit with the tag that has been added to the image.
 
 To run a promotion, navigate to the application's promotion pipeline and schedule a build on the appropriate branch. Select a promotion key of stage or prod to promote an image from dev to stage or from stage to prod respectively. The pipeline will wait for a confirmation dialog to be accepted before continuing with the promotion.
 
