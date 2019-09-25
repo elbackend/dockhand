@@ -1,5 +1,6 @@
 package com.el.jenkins.pipeline.deploy
 
+import com.boxboat.jenkins.library.config.Config
 import com.boxboat.jenkins.pipeline.deploy.BoxDeploy
 import com.boxboat.jenkins.pipeline.deploy.kubernetes.HelmDeploy
 
