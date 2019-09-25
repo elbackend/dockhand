@@ -14,6 +14,33 @@ The repository must be set up to include certain files used by Dockhand for buil
 ### Files
 For the repository setup, it is best to start from an existing project, copy over the relevant files and modify them.
 
+#### Frontend Applications (login and reporting)
+Note that frontend applications are rebuilt when they are promoted since environment properties are injected at build time.
+
+```
+# Common configurations for this repo's Jenkins pipeline
+jenkins.yaml
+
+# Jenkins files for build, promote and deploy pipelines
+Jenkinsfile
+Jenkinsfile.promote
+Jenkinsfile.deploy
+
+# Dockerfile for the application
+Dockerfile
+
+# The docker-compose used to build, tag and push the application
+cicd/docker/docker-compose.yaml
+
+# The docker-compose file for building the "promoted" image 
+cicd/promote/stage/docker-compose.yaml
+
+# Helm chart for deploying to Kubernetes
+cicd/deploy/<helm-chart>
+cicd/deploy/<helm-chart>/values-dev.yaml
+cicd/deploy/<helm-chart>/values-stage.yaml
+```
+
 #### Applications
 ```
 # Common configurations for this repo's Jenkins pipeline
