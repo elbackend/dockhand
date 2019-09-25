@@ -44,7 +44,12 @@ class ElDeploy extends BoxDeploy {
         this.allEnvironments().each { env ->
             env.withCredentials() {
               Config.pipeline.sh ("""
-                kubectl create secret generic --from-file=$secretFile $secretName --dry-run -o yaml | kubectl apply -f -
+                #kubectl create secret generic --from-file=$secretFile $secretName --dry-run -o yaml | kubectl apply -f -
+
+                if kubectl get secret $secretName; then
+                  kubectl delete secret $secretName
+                fi
+                kubectl create secret generic --from-file=$secretFile $secretName
               """)
             }
         }
