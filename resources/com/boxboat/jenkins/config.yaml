@@ -59,7 +59,7 @@ repo:
     deploymentMap:
       dev:
         environmentKey: dev
-        event: commit/feature-jenkins
+        event: commit/master
         trigger: false
       stage:
         environmentKey: stage
