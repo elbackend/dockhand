@@ -50,7 +50,7 @@ repo:
   promote:
     promotionMap:
       stage:
-        event: commit/feature-jenkins
+        event: commit/master
         promoteToEvent: tag/rc
       prod:
         event: tag/rc
@@ -59,7 +59,7 @@ repo:
     deploymentMap:
       dev:
         environmentKey: dev
-        event: commit/feature-jenkins
+        event: commit/master
         trigger: false
       stage:
         environmentKey: stage
