@@ -39,8 +39,10 @@ awsProfileMap:
     secretAccessKeyCredential: aws-secret-access-key
 repo:
   common:
-    defaultBranch: feature-jenkins
+    defaultBranch: master
     eventRegistryKeys:
+      - event: commit/master
+        registryKey: default
       - event: commit/feature-jenkins
         registryKey: default
       - eventRegex: tag/(.*)
