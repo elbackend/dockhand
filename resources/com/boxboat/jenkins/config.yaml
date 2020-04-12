@@ -43,14 +43,12 @@ repo:
     eventRegistryKeys:
       - event: commit/master
         registryKey: default
-      - event: commit/feature-jenkins
-        registryKey: default
       - eventRegex: tag/(.*)
         registryKey: default
   promote:
     promotionMap:
       stage:
-        event: commit/feature-jenkins
+        event: commit/master
         promoteToEvent: tag/rc
       prod:
         event: tag/rc
@@ -59,7 +57,7 @@ repo:
     deploymentMap:
       dev:
         environmentKey: dev
-        event: commit/feature-jenkins
+        event: commit/master
         trigger: false
       stage:
         environmentKey: stage
