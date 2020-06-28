@@ -27,8 +27,8 @@ git:
   branchUrlReplace: https://github.com/{{ path }}/tree/{{ branch }}
   commitUrlReplace: https://github.com/{{ path }}/commit/{{ hash }}
 notifyTargetMap:
-  default: !!com.boxboat.jenkins.library.notify.SlackWebHookNotifyTarget
-    credential: slack-app-token
+  jenkins-success: !!com.boxboat.jenkins.library.notify.SlackJenkinsAppNotifyTarget
+  jenkins-failure: !!com.boxboat.jenkins.library.notify.SlackJenkinsAppNotifyTarget
 registryMap:
   default:
     scheme: https
