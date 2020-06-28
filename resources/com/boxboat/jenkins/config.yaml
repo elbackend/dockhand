@@ -28,7 +28,9 @@ git:
   commitUrlReplace: https://github.com/{{ path }}/commit/{{ hash }}
 notifyTargetMap:
   jenkins-success: !!com.boxboat.jenkins.library.notify.SlackJenkinsAppNotifyTarget
+    channel: "jenkins-deployment"
   jenkins-failure: !!com.boxboat.jenkins.library.notify.SlackJenkinsAppNotifyTarget
+    channel: "jenkins-deployment"
 registryMap:
   default:
     scheme: https
