@@ -50,19 +50,16 @@ repo:
         jenkins: !!com.boxboat.jenkins.library.notify.SlackJenkinsAppNotifyTarget
           channel: "jenkins-deployment"
       successKeys:
-        - default
         - jenkins
       successTargets:
         - !!com.boxboat.jenkins.library.notify.SlackJenkinsAppNotifyTarget
           channel: "jenkins-deployment"
       failureKeys:
-        - default
         - jenkins
       failureTargets:
         - !!com.boxboat.jenkins.library.notify.SlackJenkinsAppNotifyTarget
           channel: "jenkins-deployment"
       infoKeys:
-        - default
         - jenkins
       infoTargets:
         - !!com.boxboat.jenkins.library.notify.SlackJenkinsAppNotifyTarget
