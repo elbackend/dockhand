@@ -46,9 +46,6 @@ repo:
           channel: "jenkins-deployment"
       successKeys:
         - jenkins
-      successTargets:
-        - !!com.boxboat.jenkins.library.notify.SlackJenkinsAppNotifyTarget
-          channel: "jenkins-deployment"
       failureKeys:
         - jenkins
       failureTargets:
