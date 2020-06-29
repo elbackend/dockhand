@@ -26,11 +26,6 @@ git:
   remoteUrlReplace: git@github.com:{{ path }}.git
   branchUrlReplace: https://github.com/{{ path }}/tree/{{ branch }}
   commitUrlReplace: https://github.com/{{ path }}/commit/{{ hash }}
-notifyTargetMap:
-  jenkins-success: !!com.boxboat.jenkins.library.notify.SlackJenkinsAppNotifyTarget
-    channel: "jenkins-deployment"
-  jenkins-failure: !!com.boxboat.jenkins.library.notify.SlackJenkinsAppNotifyTarget
-    channel: "jenkins-deployment"
 registryMap:
   default:
     scheme: https
@@ -61,7 +56,9 @@ repo:
           channel: "jenkins-deployment"
       infoKeys:
         - jenkins
-
+      infoTargets:
+        - !!com.boxboat.jenkins.library.notify.SlackJenkinsAppNotifyTarget
+          channel: "jenkins-deployment"
     eventRegistryKeys:
       - event: commit/master
         registryKey: default
