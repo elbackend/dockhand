@@ -48,14 +48,8 @@ repo:
         - jenkins
       failureKeys:
         - jenkins
-      failureTargets:
-        - !!com.boxboat.jenkins.library.notify.SlackJenkinsAppNotifyTarget
-          channel: "jenkins-deployment"
       infoKeys:
         - jenkins
-      infoTargets:
-        - !!com.boxboat.jenkins.library.notify.SlackJenkinsAppNotifyTarget
-          channel: "jenkins-deployment"
     eventRegistryKeys:
       - event: commit/master
         registryKey: default
