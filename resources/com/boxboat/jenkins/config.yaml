@@ -46,6 +46,9 @@ repo:
   common:
     defaultBranch: master
     notify:
+      targetMap:
+        jenkins: !!com.boxboat.jenkins.library.notify.SlackJenkinsAppNotifyTarget
+          channel: "jenkins-deployment"
       successKeys:
         - default
         - jenkins
