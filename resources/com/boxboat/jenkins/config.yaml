@@ -61,9 +61,7 @@ repo:
           channel: "jenkins-deployment"
       infoKeys:
         - jenkins
-      infoTargets:
-        - !!com.boxboat.jenkins.library.notify.SlackJenkinsAppNotifyTarget
-          channel: "jenkins-deployment"
+
     eventRegistryKeys:
       - event: commit/master
         registryKey: default
