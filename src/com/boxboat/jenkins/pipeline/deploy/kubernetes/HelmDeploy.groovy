@@ -65,8 +65,21 @@ class HelmDeploy implements Serializable {
         return """
             helm_current_dir=\$(pwd)
             cd "${directory}"
+            status=`helm status "${name}" | grep "STATUS" |  awk '{print $2}'`
+            if test -z "$status" 
+            then
+                echo " deployment does not exist, doing fresh install"
+                helm install "${chart}"
+            fi
+
+            if [ $status = 'failed' ]; then
+            echo " deployment does not exist, delete helm with history, doing fresh install"
             helm delete --keep-history "${name}"
-            helm upgrade ${optionsString(combinedOptions)} "${chart}"
+            helm install "${chart}"
+            else
+            echo "status is okay, doing a new upgrade"
+            helm upgrade ${optionsString(combinedOptions)} "${name}" "${chart}"
+            fi
             cd "\$helm_current_dir"
         """
     }
