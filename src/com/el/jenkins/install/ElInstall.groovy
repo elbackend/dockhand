@@ -36,7 +36,7 @@ class ElDeploy extends BoxDeploy {
             )
             env.withCredentials() {
                 helmDeployApp.delete
-                helmDeployApp.upgrade(["install": true, "force": true, "wait": true])
+                helmDeployApp.install(["install": true, "force": true, "wait": true])
             }
         }
     }
