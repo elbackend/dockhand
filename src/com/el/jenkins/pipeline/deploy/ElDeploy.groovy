@@ -35,6 +35,7 @@ class ElDeploy extends BoxDeploy {
                 ]
             )
             env.withCredentials() {
+                helmDeployApp.delete(["keep-history": true])
                 helmDeployApp.upgrade(["atomic": true,"install": true, "force": true, "reuse-values": true])
             }
         }
