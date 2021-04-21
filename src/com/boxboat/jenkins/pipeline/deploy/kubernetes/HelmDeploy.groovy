@@ -66,7 +66,7 @@ class HelmDeploy implements Serializable {
             helm_current_dir=\$(pwd)
             cd "${directory}"
             helm delete --keep-history "${name}"
-            helm upgrade ${optionsString(combinedOptions)} "${name}" "${chart}"
+            helm upgrade ${optionsString(combinedOptions)} "${chart}"
             cd "\$helm_current_dir"
         """
     }
