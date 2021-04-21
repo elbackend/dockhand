@@ -65,7 +65,7 @@ class HelmDeploy implements Serializable {
         return """
             helm_current_dir=\$(pwd)
             cd "${directory}"
-            status=`helm status "\${name} | grep "STATUS" |  awk '{print $2}'`
+            status=$(helm status "${name} | grep "STATUS" |  awk '{print $2}')
             helm delete --keep-history "${name}"
             helm upgrade ${optionsString(combinedOptions)} "${name}" "${chart}"
             cd "\$helm_current_dir"
