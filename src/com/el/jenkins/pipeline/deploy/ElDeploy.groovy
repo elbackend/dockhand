@@ -35,7 +35,7 @@ class ElDeploy extends BoxDeploy {
                 ]
             )
             env.withCredentials() {
-                helmDeployApp.upgrade(["atomic": true,"install": true, "force": true,])
+                helmDeployApp.upgrade(["atomic": true,"install": true])
             }
         }
     }
