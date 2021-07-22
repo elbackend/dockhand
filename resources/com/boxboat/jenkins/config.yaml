@@ -5,6 +5,9 @@ deployTargetMap:
   stage: !!com.boxboat.jenkins.library.deployTarget.KubernetesDeployTarget
     contextName: el-stage
     credential: kubeconfig-stage
+  test-prod: !!com.boxboat.jenkins.library.deployTarget.KubernetesDeployTarget
+    contextName: el-test-prod
+    credential: kubeconfig-test-prod
   prod: !!com.boxboat.jenkins.library.deployTarget.KubernetesDeployTarget
     contextName: el-prod
     credential: kubeconfig-prod
@@ -15,6 +18,9 @@ environmentMap:
   stage:
     name: stage
     deployTargetKey: stage
+  tets-prod:
+    name: test-prod
+    deployTargetKey: test-prod
   prod:
     name: prod
     deployTargetKey: prod
@@ -60,6 +66,9 @@ repo:
       stage:
         event: commit/master
         promoteToEvent: tag/rc
+      test-prod:
+        event: tag/rc
+        promoteToEvent: tag/release
       prod:
         event: tag/rc
         promoteToEvent: tag/release
@@ -72,6 +81,10 @@ repo:
       stage:
         environmentKey: stage
         event: tag/rc
+        trigger: false
+      test-prod:
+        environmentKey: test-prod
+        event: tag/release
         trigger: false
       prod:
         environmentKey: prod
