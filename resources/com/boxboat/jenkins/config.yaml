@@ -18,7 +18,7 @@ environmentMap:
   stage:
     name: stage
     deployTargetKey: stage
-  tets-prod:
+  test-prod:
     name: test-prod
     deployTargetKey: test-prod
   prod:
