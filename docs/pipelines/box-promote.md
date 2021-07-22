@@ -27,7 +27,7 @@ promote:
 @Library('jenkins-shared-library@master')
 import com.boxboat.jenkins.pipeline.promote.*
 
-def promotions = ["", "stage", "prod"]
+def promotions = ["", "stage", , "test-prod", "prod"]
 properties([
   parameters([
     choice(name: 'promotionKey', choices: promotions, description: 'Promotion', defaultValue: '')

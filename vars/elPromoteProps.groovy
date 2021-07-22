@@ -2,6 +2,7 @@ def props() {
   def promotions = [
             "",
             "stage",
+            "test-prod",
             "prod",
     ]
     return [
