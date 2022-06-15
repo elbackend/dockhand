@@ -3,7 +3,6 @@ def props() {
             "",
             "stage",
             "test-prod",
-            "prod",
     ]
     return [
             parameters([

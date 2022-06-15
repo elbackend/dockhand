@@ -132,12 +132,6 @@ class GitBuildVersions implements Serializable {
   job: test/master
   params:
   - {\$class: StringParameterValue, name: deploymentKey, value: test-prod}
-- event: tag/release
-  eventRegex: null
-  imagePaths: [test/b, test/a]
-  job: test/master
-  params:
-  - {\$class: StringParameterValue, name: deploymentKey, value: prod}
 """.trim()
         result = Utils.resultOrTest(result, testResult)
         if (!result) {
