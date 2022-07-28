@@ -5,8 +5,15 @@ import com.boxboat.jenkins.library.config.Config
 
 class GitRepo implements Serializable {
 
-    public checkoutData = [:]
     public dir
+
+    private shortHashLength = 12
+
+    static List<String> remoteBranches(String gitRemoteUrl) {
+        return Utils.resultOrTest(Config.pipeline.sh(returnStdout: true, script: """
+            git ls-remote --heads "${gitRemoteUrl}" | sed 's|.*refs/heads/\\(.*\\)|\\1|g'
+        """)?.trim()?.split('\n')?.findAll { it -> !it.isEmpty() }, ["master", "develop"])
+    }
 
     String getHash() {
         return Utils.resultOrTest(Config.pipeline.sh(returnStdout: true, script: """
@@ -16,25 +23,35 @@ class GitRepo implements Serializable {
     }
 
     String getShortHash() {
-        return getHash()?.substring(0, 12)
+        return getHash()?.substring(0, shortHashLength)
     }
 
     String _branch
+    String _prBranch
+
+    String getPrBranch(){
+        return _prBranch
+    }
 
     String getBranch() {
         if (!_branch) {
-            _branch = checkoutData?.GIT_BRANCH ?: Config.pipeline.sh(returnStdout: true, script: """
-                git rev-parse --abbrev-ref HEAD
-            """)?.trim()
-            if (_branch?.startsWith("origin/")) {
-                _branch = _branch.substring("origin/".length())
-            }
+            setBranch(Config.pipeline.sh(returnStdout: true, script: "git rev-parse --abbrev-ref HEAD")?.trim())
         }
         return Utils.resultOrTest(_branch, "master")
     }
 
     String setBranch(String value) {
         _branch = value
+        if (_branch?.startsWith("origin/")) {
+            _branch = _branch.substring("origin/".length())
+        }
+    }
+
+    String setPrBranch(String value){
+        _prBranch = value
+        if (_prBranch?.startsWith("origin/")) {
+            _prBranch = _prBranch.substring("origin/".length())
+        }
     }
 
     String getRemoteUrl() {
@@ -46,32 +63,48 @@ class GitRepo implements Serializable {
     }
 
     String getRemotePath() {
-        return Config.global.git.getRemotePath(getRemoteUrl())
+        return Config.getGitRemotePath(getRemoteUrl())
     }
 
     String getCommitUrl() {
-        return Config.global.git.getCommitUrl(getRemotePath(), getHash())
+        return Config.getGitSelected().getCommitUrl(getRemotePath(), getHash())
     }
 
     String getBranchUrl() {
-        return Config.global.git.getBranchUrl(getRemotePath(), getBranch())
+        return Config.getGitSelected().getBranchUrl(getRemotePath(), getBranch())
+    }
+
+    String getTagReferenceHash(String tag) {
+        def result = Config.pipeline.sh(returnStdout: true, script: """
+            cd "${this.dir}"
+            git show-ref --hash=${shortHashLength} -s ${tag}  || :
+        """)?.trim()
+        return Utils.resultOrTest(result, "0123456789abcdef0123456789abcdef".substring(shortHashLength))
     }
 
     boolean isBranchTip() {
-        String originHash = Config.pipeline.sh(returnStdout: true, script: """
-            git show-branch --sha1-name origin/${this.getBranch()} || :
-        """)
-        String tipHash
-        def closure = {
-            def matcher = originHash =~ /^\[([0-9a-f]+)\]/
-            tipHash = matcher.hasGroup() && matcher.size() > 0 ? matcher[0][1] : null
-        }
-        closure()
         def result = false
-        if (tipHash) {
-            result = hash.startsWith(tipHash)
+        if (this.isBranchPullRequest()) {
+            result = true
+        } else {
+            String originHash = Config.pipeline.sh(returnStdout: true, script: """
+                git show-branch --sha1-name origin/${this.getBranch()} || :
+            """)
+            String tipHash
+            def closure = {
+                def matcher = originHash =~ /^\[([0-9a-f]+)\]/
+                tipHash = matcher.hasGroup() && matcher.size() > 0 ? matcher[0][1] : null
+            }
+            closure()
+            if (tipHash) {
+                result = hash.startsWith(tipHash)
+            }
         }
         return Utils.resultOrTest(result, true)
+    }
+
+    boolean isBranchPullRequest() {
+        return _prBranch != null
     }
 
     def checkout(String checkout) {

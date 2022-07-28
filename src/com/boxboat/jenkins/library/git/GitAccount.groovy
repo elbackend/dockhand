@@ -11,11 +11,9 @@ class GitAccount implements Serializable {
         if (_initialized) {
             return true
         }
-        Config.pipeline.withCredentials([Config.pipeline.sshUserPrivateKey(
-                credentialsId: Config.global.git.credential,
-                keyFileVariable: 'sshKey',
-                usernameVariable: 'username'
-        )]) {
+        Config.global.git.withCredentials([
+                'keyFileVariable' : 'sshKey',
+                'usernameVariable': 'username']) {
             Config.pipeline.sh """
                 # Private Key
                 mkdir -p ~/.ssh
@@ -44,7 +42,18 @@ class GitAccount implements Serializable {
             exit 0
         """
         def checkoutData = Config.pipeline.checkout Config.pipeline.scm
-        return new GitRepo(dir: Utils.toAbsolutePath("."), checkoutData: checkoutData)
+        def repo = new GitRepo(dir: Utils.toAbsolutePath("."))
+
+        repo.setBranch(checkoutData?.GIT_BRANCH)
+
+        if (Config.pipeline.env?.CHANGE_BRANCH){
+            if (Config.repo.prUseTargetBranch) {
+                repo.setBranch(Config.pipeline.env.CHANGE_BRANCH)
+            }
+            repo.setPrBranch(checkoutData?.GIT_BRANCH)
+        }
+
+        return repo
     }
 
     // Checkout Remote Repository into a targetDir
@@ -58,6 +67,9 @@ class GitAccount implements Serializable {
             rm -rf "${targetDir}"
             mkdir -p "${targetDir}"
             cd "${targetDir}"
+            if [ -z "\$GIT_SSH_COMMAND" ]; then
+                export GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
+            fi
             git clone ${depthStr} "${remoteUrl}" .
         """
 
