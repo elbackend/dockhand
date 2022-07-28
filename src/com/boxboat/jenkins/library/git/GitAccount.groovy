@@ -11,9 +11,11 @@ class GitAccount implements Serializable {
         if (_initialized) {
             return true
         }
-        Config.global.git.withCredentials([
-                'keyFileVariable' : 'sshKey',
-                'usernameVariable': 'username']) {
+        Config.pipeline.withCredentials([Config.pipeline.sshUserPrivateKey(
+                credentialsId: Config.global.git.credential,
+                keyFileVariable: 'sshKey',
+                usernameVariable: 'username'
+        )]) {
             Config.pipeline.sh """
                 # Private Key
                 mkdir -p ~/.ssh
@@ -42,18 +44,7 @@ class GitAccount implements Serializable {
             exit 0
         """
         def checkoutData = Config.pipeline.checkout Config.pipeline.scm
-        def repo = new GitRepo(dir: Utils.toAbsolutePath("."))
-
-        repo.setBranch(checkoutData?.GIT_BRANCH)
-
-        if (Config.pipeline.env?.CHANGE_BRANCH){
-            if (Config.repo.prUseTargetBranch) {
-                repo.setBranch(Config.pipeline.env.CHANGE_BRANCH)
-            }
-            repo.setPrBranch(checkoutData?.GIT_BRANCH)
-        }
-
-        return repo
+        return new GitRepo(dir: Utils.toAbsolutePath("."), checkoutData: checkoutData)
     }
 
     // Checkout Remote Repository into a targetDir
