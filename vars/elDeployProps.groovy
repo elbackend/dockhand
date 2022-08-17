@@ -4,7 +4,6 @@ def props() {
             "dev",
             "stage",
             "test-prod",
-            "prod",
 
     ]
     return [
