@@ -8,9 +8,6 @@ deployTargetMap:
   test-prod: !!com.boxboat.jenkins.library.deployTarget.KubernetesDeployTarget
     contextName: el-test-prod
     credential: kubeconfig-test-prod
-  prod: !!com.boxboat.jenkins.library.deployTarget.KubernetesDeployTarget
-    contextName: el-prod
-    credential: kubeconfig-prod
 environmentMap:
   dev:
     name: dev
@@ -21,9 +18,6 @@ environmentMap:
   test-prod:
     name: test-prod
     deployTargetKey: test-prod
-  prod:
-    name: prod
-    deployTargetKey: prod
 git:
   buildVersionsUrl: git@github.com:elbackend/build-versions.git
   credential: git
@@ -83,7 +77,4 @@ repo:
         environmentKey: test-prod
         event: tag/release
         trigger: false
-      prod:
-        environmentKey: prod
-        event: tag/release
-        trigger: false
+
